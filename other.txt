@@ -1,0 +1,151 @@
+Pokemon.java
+
+public abstract class Pokemon extends Entity{
+    public static final double[][] battleTable = {{1, .5, 2}, {2, 1, .5}, {.5, 2, 1}};
+
+    public Pokemon(String n) {
+        super(n, (int)(Math.random() * 6 + 20));
+    }
+
+    public abstract String getSpecialMenu();
+    
+    public abstract int getNumSpecialMenuItems();
+
+    public abstract String specialAttack(Pokemon p, int move);
+
+    public String getBasicMenu() {
+        return "1. Slam\n2. Tackle\n3. Punch";
+    }
+
+    public int getNumBasicMenuItems() {
+        return 3;
+    }
+
+    public String basicAttack(Pokemon p, int move) {
+        if (move == 1) {
+            return this.slam(p);
+        }
+        else if (move == 2) {
+            return this.tackle(p);
+        }
+        else {
+            return this.punch(p);
+        }
+    }
+
+    public String getAttackMenu() {
+        return "1. Basic Attack\n2. Special Attack";
+    }
+
+    public int getNumAttackMenuItems() {
+        return 2;
+    }
+
+    public String slam(Pokemon p) {
+        int damage = (int)(Math.random() * 6);
+        p.takeDamage(damage);
+        
+        return p.getName() + " is SLAMMED by " + this.getName() + " and takes " + damage + " damage.";
+    }
+
+    public String tackle(Pokemon p) {
+        int damage = (int)(Math.random() * 2 + 1);
+        p.takeDamage(damage);
+        
+        return p.getName() + " is TACKLED by " + this.getName() + " and takes " + damage + " damage.";
+    }
+
+    public String punch(Pokemon p) {
+        int damage = (int)(Math.random() * 4 + 1);
+        p.takeDamage(damage);
+        
+        return p.getName() + " is PUNCHED by " + this.getName() + " and takes " + damage + " damage.";
+    }
+
+    public int getType() {
+        if (this instanceof Fire) 
+            return 0;
+        else if (this instanceof Water)
+            return 1;
+        else if (this instanceof Grass)
+            return 2;
+        else
+            return -1;
+    }
+}
+Entity.java
+
+public abstract class Entity
+{
+        private String name;
+        private int hp;
+        private int maxHp;
+
+        /* class constructor
+        *  @Param n name of the entity
+        *  @Param mHp max health of the entity
+        */
+        public Entity(String n, int mHp)
+        {
+                name  = n;
+                hp        = mHp;
+                maxHp = mHp;
+        }
+
+        /* gets the current hp of the entity
+        *  @Return hp current hp
+        */
+        public int getHp()
+        {
+                return hp;
+        }
+
+        /* gets the max hp of the entity
+        *  @Return maxHp mx hp of entity
+        */
+        public int getMaxHp()
+        {
+                return maxHp;
+        }
+
+        /* subtracts damage d from the current hp
+        *  of the entity.
+        *  @Param d damage the entity has taken
+        */
+        public void takeDamage(int d)
+        {
+                if((hp - d) < 0)
+                {
+                        hp = 0;
+                }
+                else
+                {
+                        hp -= d;
+                }
+        }
+
+        /* Fully restores the health of the entity
+        */
+        public void heal()
+        {
+                hp = maxHp;
+        }
+
+        /* gets the name of the entity
+        *  @Return name name of entity
+        */
+        public String getName()
+        {
+                return name;
+        }
+
+        /* overrides the toString function to print
+        *  the information of the entity
+        *  @Return string
+        */
+        @Override
+        public String toString()
+        {
+                return name + " HP: " + hp + "/" + maxHp;
+        }
+}
