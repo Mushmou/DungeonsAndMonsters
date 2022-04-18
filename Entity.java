@@ -3,7 +3,7 @@ public abstract class Entity{
 	private int hp;
 	private int maxHp;
 
-	public Entity(String n, int mHp){
+	public Entity (String n, int mHp){
 		name = n;
 		hp = mHp;
 		maxHp = mHp;

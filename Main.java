@@ -1,8 +1,8 @@
 import java.util.*;
 class Main {
   public static void main(String[] args) {
-	Hero noah = new Hero("noah");
-	System.out.println(noah.getSubAttackMenu(1));
-    System.out.println("Hello world!");
+	Hero myHero = new Hero("noah");
+	Ranger ranger = new Ranger("ranger", 20);
+	System.out.println(myHero);
   }
 }

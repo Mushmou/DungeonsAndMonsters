@@ -1,5 +1,6 @@
 import java.awt.Point;
-public class Hero extends Entity{
+import java.util.Random;
+public class Hero extends Entity implements Fighter, Magical, Archer{
 	private Point loc;
 	private int level;
 	private int gold;
@@ -9,11 +10,19 @@ public class Hero extends Entity{
 	public Hero (String n){
 		super(n, 25);
 		level = 1;
+		gold = 25;
+		potions = 1;
+		keys = 0;
 	}
 
 	public String toString(){
 		// toString should display the name, hp, level, gold, potions, keys, and map.
-		return "name: " + getName();
+		return "Name: " + getName() + "\n" + 
+			"HP: " + getHp() + "\n" + 
+			"Level: " + level + "\n" + 
+			"Gold: " + gold + "\n" + 
+			"P: " + potions + " " + "K: " + keys
+			;
 	}
 
 	public void levelUp(){
@@ -83,40 +92,134 @@ public class Hero extends Entity{
 	}
 
 	public int getNumSubAttackMenuItems(int choice){
-		return 2;
+		if (choice == 1){
+			return Fighter.NUM_FIGHTER_MENU_ITEMS;
+		}
+		if (choice == 2){
+			return Archer.NUM_ARCHER_MENU_ITEMS;
+		}
+		if (choice == 3){
+			return Magical.NUM_MAGIC_MENU_ITEMS;
+		}
+		else{
+			return 0;
+		}
 	}
 
-	// // FIGHTER
-	// public String sword (Hero h){
-	// 	int damage = 1;
-	// 	h.takeDamage(damage);
-	// 	return " slashes " + h.getName() + " with sword for " + damage + "damage";
-	// }
-	// public String axe (Hero h){
-	// 	int damage = 1;
-	// 	h.takeDamage(damage);
-	// 	return " slashes " + h.getName() + " with axe for " + damage + "damage";
-	// }
-	// //ARCHER
-	// public String arrow(Hero h){
-	// 	int damage = 2;
-	// 	h.takeDamage(damage);
-	// 	return " shoots " + h.getName() + " with arrow for " + damage + "damage";
-	// }
-	// public String fireArrow(Hero h){
-	// 	int damage = 2;
-	// 	h.takeDamage(damage);
-	// 	return " shoots " + h.getName() + " with fire arrow for " + damage + "damage";
-	// }
-	// //MAGICAL
-	// public String magicMissile(Hero h){
-	// 	int damage = 3;
-	// 	h.takeDamage(damage);
-	// 	return " hits " + h.getName() + " with magic Missile for " + damage + "damage";
-	// }
-	// public String fireball(Hero h){
-	// 	int damage = 6;
-	// 	h.takeDamage(damage);
-	// 	return " hits " + h.getName() + " with fireball for " + damage + "damage";
-	// }
+	public String attack(Enemy e, int choice, int subChoice){
+		// Fighter
+		if (choice == 1){
+			if (subChoice == 1){
+				return sword(e);
+			}
+			if (subChoice == 2){
+				return axe(e);
+			}
+		}
+		// Magic
+		if (choice == 2){
+			if (subChoice == 1){
+				return magicMissile(e);
+			}
+			if (subChoice == 2){
+				return fireball(e);
+			}
+		}
+		// Range
+		if (choice == 3){
+			if (subChoice == 1){
+				return arrow(e);
+			}
+			if (subChoice == 2){
+				return fireArrow(e);
+			}
+		}
+		return "error";
+	}
+	
+	// FIGHTER
+	public String sword (Entity e){
+		// MAX 2 | MIN 1
+		int damage = (int)Math.floor(Math.random()*(2-1+1) + 1);
+		return getName() + " slashes " + e.getName() + " with sword for " + damage + " damage";
+	}
+	public String axe (Entity e){
+		// MAX 3 | MIN 1
+		int damage = (int)Math.floor(Math.random()*(3-1+1) + 1);
+		return getName() + " butchers " + e.getName() + " with axe for " + damage + " damage";
+	}
+	//MAGICAL
+	public String magicMissile(Entity e){
+		// MAX 7 | MIN 1
+		int damage = (int)Math.floor(Math.random()*(7-1+1) + 1);
+		return getName() + " hits " + e.getName() + " with magic Missile for " + damage + " damage";
+	}
+	public String fireball(Entity e){
+		// MAX 10 | MIN 1
+		int damage = (int)Math.floor(Math.random()*(10-1+1) + 1);
+		return getName() + " hits " + e.getName() + " with fireball for " + damage + " damage";
+	}
+	//ARCHER
+	public String arrow(Entity e){
+		// MAX 2 | MIN 1
+		int damage = (int)Math.floor(Math.random()*(2-1+1) + 1);
+		return getName() + " shoots " + e.getName() + " with arrow for " + damage + " damage";
+	}
+	public String fireArrow(Entity e){
+		// MAX 4 | MIN 1
+		int damage = (int)Math.floor(Math.random()*(4-1+1) + 1);
+		return getName() + " shoots " + e.getName() + " with fire arrow for " + damage + " damage";
+	} 
+
+	public int getGold(){
+		return gold;
+	}
+
+	public void collectGold(int g){
+		gold += g;
+	}
+	
+	public boolean spendGold(int g){
+		if (g > 0){
+			gold -= g;
+			return true;
+		}
+		return false;
+	}
+
+	public boolean hasKey(){
+		if (keys > 0){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	public void pickUpKey(){
+		keys += 1;
+	}
+
+	public boolean useKey(){
+		keys -= 1;
+		return true;
+	}
+
+	public boolean hasPotion(){
+		if (potions > 0){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
+	public void pickupPotion(){
+		potions += 1;
+	}
+
+	public boolean usePotion(){
+		potions -= 1;
+		return true;
+	}
 }
